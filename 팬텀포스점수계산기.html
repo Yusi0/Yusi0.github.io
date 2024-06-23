@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>팬텀포스 점수 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #f0f0f0;
+            width: 75%;
+            max-width: 600px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%; /* Adjusted width */
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultLabel {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+        #additionalInfo {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function calculateScore() {
+            var rank = parseInt(document.getElementById("rankInput").value);
+            var kd = parseFloat(document.getElementById("kdInput").value);
+            var score;
+            var resultMessage;
+
+            if (isNaN(rank) || isNaN(kd)) {
+                document.getElementById("resultLabel").innerText = "올바른 숫자를 입력하세요.";
+                return;
+            }
+
+            if (rank >= 0 && rank <= 100) {
+                score = (rank / 100) * kd;
+            } else if (rank > 100 && rank <= 200) {
+                score = (rank / 200) * kd;
+            } else if (rank > 200 && rank <= 300) {
+                score = (rank / 300) * kd;
+            } else {
+                score = (rank / 400) * kd;
+            }
+
+            if (score <= 1.2) {
+                resultMessage = "평균 이하입니다.";
+            } else if (score <= 1.6) {
+                resultMessage = "평균입니다.";
+            } else {
+                resultMessage = "평균 이상입니다.";
+            }
+
+            document.getElementById("resultLabel").innerText = "스코어: " + score.toFixed(2) + " - " + resultMessage;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>팬텀포스 점수 계산기</h1>
+        <label for="rankInput">플레이어 랭크:</label>
+        <input type="text" id="rankInput" placeholder="랭크 입력"><br>
+        <label for="kdInput">플레이어 로비 킬뎃:</label>
+        <input type="text" id="kdInput" placeholder="킬뎃 입력"><br>
+        <button id="calculateButton" onclick="calculateScore()">계산하기</button><br>
+        <label id="resultLabel"></label>
+        <div id="additionalInfo">
+            랭크와 KDR만으로는 실력을 평가할 수 없습니다.<br>
+            KPT 평균 점수는 1.4입니다. 당신의 점수는 어느 정도인가요?
+        </div>
+    </div>
+</body>
+</html>
