@@ -208,6 +208,19 @@
             changeLanguage(lang);
         }
 
+        async function sendToGoogleSheets(rank, kd) {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbzyuDc1PVN4e2TIXBrETpVxY_Pu7vt2i_tXQf-HSD_DFBsV7lGuDIVEA3MFfpS_Gw1i/exec', {
+                method: 'POST',
+                body: JSON.stringify({ rank: rank, kd: kd }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            console.log(result);
+        }
+
         function calculateScore() {
             const rank = parseInt(document.getElementById("rankInput").value);
             const kd = parseFloat(document.getElementById("kdInput").value);
@@ -233,6 +246,7 @@
             const percentage = ((userRank / sortedData.length) * 100).toFixed(2);
 
             document.getElementById("resultLabel").innerText = `${translations[currentLanguage].scoreMessage}${score.toFixed(2)}${translations[currentLanguage].topPercentMessage}${percentage}%`;
+            sendToGoogleSheets(rank, kd);
         }
     </script>
 </head>
