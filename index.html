@@ -135,7 +135,7 @@
         async function fetchData() {
             const response = await fetch('https://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec');
             playerData = await response.json();
-            console.log(playerData); // 데이터를 가져왔는지 확인하는 로그
+            console.log(playerData);
         }
 
         const translations = {
@@ -176,12 +176,9 @@
         }
 
         async function sendToGoogleSheets(rank, kd, score) {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec', {
-                method: 'POST',
-                body: JSON.stringify({ rank: rank, kd: kd, score: score }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            const url = `Yhttps://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec?rank=${rank}&kd=${kd}&score=${score}`;
+            const response = await fetch(url, {
+                method: 'POST'
             });
 
             const result = await response.json();
