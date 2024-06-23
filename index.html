@@ -176,7 +176,7 @@
         }
 
         async function sendToGoogleSheets(rank, kd, score) {
-            const url = `Yhttps://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec?rank=${rank}&kd=${kd}&score=${score}`;
+            const url = `https://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec?rank=${rank}&kd=${kd}&score=${score}`;
             const response = await fetch(url, {
                 method: 'POST'
             });
