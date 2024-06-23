@@ -74,7 +74,7 @@
             var resultMessage;
 
             if (isNaN(rank) || isNaN(kd)) {
-                document.getElementById("resultLabel").innerText = "올바르게 입력하세요.";
+                document.getElementById("resultLabel").innerText = "올바른 값을 기입하세요.";
                 return;
             }
 
@@ -103,11 +103,11 @@
 <body>
     <div class="container">
         <h1>팬텀포스 점수 계산기</h1>
-        <label for="rankInput">플레이어 랭크:</label>
+        <label for="rankInput">랭크:</label>
         <input type="text" id="rankInput" placeholder="랭크"><br>
-        <label for="kdInput">플레이어 로비 킬뎃:</label>
+        <label for="kdInput">로비 KDR:</label>
         <input type="text" id="kdInput" placeholder="KDR"><br>
-        <button id="calculateButton" onclick="calculateScore()">계산하기</button><br>
+        <button id="calculateButton" onclick="calculateScore()">계산</button><br>
         <label id="resultLabel"></label>
         <div id="additionalInfo">
             랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단하세요.<br>
