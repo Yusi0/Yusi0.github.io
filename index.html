@@ -156,7 +156,7 @@
             }
         };
 
-        let currentLanguage = 'ko';
+        let currentLanguage = 'en';
 
         function changeLanguage(lang) {
             currentLanguage = lang;
@@ -168,7 +168,7 @@
         }
 
         function toggleLanguage() {
-            const lang = document.getElementById('languageToggle').checked ? 'en' : 'ko';
+            const lang = document.getElementById('languageToggle').checked ? 'ko' : 'en';
             changeLanguage(lang);
         }
 
@@ -205,7 +205,7 @@
         }
     </script>
 </head>
-<body onload="changeLanguage('ko')">
+<body onload="changeLanguage('en')">
     <div class="container">
         <div class="language-switch">
             <label class="switch">
