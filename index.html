@@ -26,6 +26,7 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
         }
         h1 {
             color: #333;
@@ -70,7 +71,7 @@
         .language-switch {
             position: absolute;
             top: 20px;
-            left: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
         }
@@ -131,9 +132,9 @@
     <script>
         const translations = {
             en: {
-                title: "Phantom Forces Score Calc.",
+                title: "PF Score Calc.",
                 rankLabel: "Rank:",
-                kdLabel: "KDR:",
+                kdLabel: "Lobby KDR:",
                 calculateButton: "Calculate",
                 scoreMessage: "Score: ",
                 belowAverage: "Below Average",
@@ -144,7 +145,7 @@
             ko: {
                 title: "팬텀포스 점수 계산기",
                 rankLabel: "랭크:",
-                kdLabel: "KDR:",
+                kdLabel: "로비 KDR:",
                 calculateButton: "계산",
                 scoreMessage: "스코어: ",
                 belowAverage: "평균 미만",
@@ -204,20 +205,20 @@
     </script>
 </head>
 <body onload="changeLanguage('ko')">
-    <div class="language-switch">
-        <label class="switch">
-            <input type="checkbox" id="languageToggle" onclick="toggleLanguage()">
-            <span class="slider">
-                <span class="slider-label">ko</span>
-                <span class="slider-label">en</span>
-            </span>
-        </label>
-    </div>
     <div class="container">
+        <div class="language-switch">
+            <label class="switch">
+                <input type="checkbox" id="languageToggle" onclick="toggleLanguage()">
+                <span class="slider">
+                    <span class="slider-label">ko</span>
+                    <span class="slider-label">en</span>
+                </span>
+            </label>
+        </div>
         <h1 id="title">팬텀포스 점수 계산기</h1>
         <label id="rankLabel" for="rankInput">랭크:</label>
         <input type="text" id="rankInput" placeholder="랭크"><br>
-        <label id="kdLabel" for="kdInput">KDR:</label>
+        <label id="kdLabel" for="kdInput">로비 KDR:</label>
         <input type="text" id="kdInput" placeholder="KDR"><br>
         <button id="calculateButton" onclick="calculateScore()">계산</button><br>
         <label id="resultLabel"></label>
