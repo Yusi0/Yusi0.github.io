@@ -12,6 +12,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
         .container {
             background-color: #f0f0f0;
@@ -130,39 +131,28 @@
         }
     </style>
     <script>
-        let playerData = [];
-
-        async function fetchData() {
-            try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                playerData = await response.json();
-                console.log(playerData);
-            } catch (error) {
-                console.error('Fetch data error:', error);
-            }
-        }
-
         const translations = {
             ko: {
-                title: "팬텀포스 점수 계산기",
-                rankLabel: "랭크:",
-                kdLabel: "로비 KDR:",
-                calculateButton: "계산",
-                scoreMessage: "스코어: ",
-                topPercentMessage: " - 상위 ",
-                additionalInfo: "랭크와 KDR만으로는 실력을 평가할 수 없습니다.<br>플레이 스타일을 고려해 객관적으로 판단해야 합니다.<br><br>KPT S2를 통해 수집한 한국 유저의 평균 점수는 1.4점입니다.<br>당신은 몇 점인가요?"
-            },
-            en: {
                 title: "PF Score Calc.",
                 rankLabel: "Rank:",
                 kdLabel: "Lobby KDR:",
                 calculateButton: "Calculate",
                 scoreMessage: "Score: ",
-                topPercentMessage: " - Top ",
-                additionalInfo: "Rank and KDR alone cannot evaluate skill.<br>Objective judgment should consider play style.<br><br>The average score for Korean users collected through KPT S2 is 1.4.<br>What is your score?"
+                belowAverage: "Below Average",
+                average: "Average",
+                aboveAverage: "Above Average",
+                additionalInfo: "Rank and KDR alone cannot evaluate skill. Objective judgment should consider play style.\n\nThe average score for Korean users collected through KPT S2 is 1.4. What is your score?"
+            },
+            en: {
+                title: "팬텀포스 점수 계산기",
+                rankLabel: "랭크:",
+                kdLabel: "로비 KDR:",
+                calculateButton: "계산",
+                scoreMessage: "스코어: ",
+                belowAverage: "평균 미만",
+                average: "평균",
+                aboveAverage: "평균 이상",
+                additionalInfo: "랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단해야 합니다.\n\nKPT S2를 통해 수집한 한국 유저의 평균 점수는 1.4점입니다. 당신은 몇 점인가요?"
             }
         };
 
@@ -174,37 +164,22 @@
             document.getElementById("rankLabel").innerText = translations[lang].rankLabel;
             document.getElementById("kdLabel").innerText = translations[lang].kdLabel;
             document.getElementById("calculateButton").innerText = translations[lang].calculateButton;
-            document.getElementById("additionalInfo").innerHTML = translations[lang].additionalInfo;
+            document.getElementById("additionalInfo").innerText = translations[lang].additionalInfo;
         }
 
         function toggleLanguage() {
-            const lang = document.getElementById('languageToggle').checked ? 'en' : 'ko';
+            const lang = document.getElementById('languageToggle').checked ? 'ko' : 'en';
             changeLanguage(lang);
-        }
-
-        async function sendToGoogleSheets(rank, kd, score) {
-            const url = `https://script.google.com/macros/s/AKfycbz1y1A_r_v8vBIT4leA5Tn7HO7hhTj8At7N8xMMthgdoObycLGTZDVzX1g9cDIBigMK/exec?rank=${rank}&kd=${kd}&score=${score}`;
-            try {
-                const response = await fetch(url, {
-                    method: 'POST'
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json();
-                console.log(result);
-            } catch (error) {
-                console.error('Send data error:', error);
-            }
         }
 
         function calculateScore() {
             const rank = parseInt(document.getElementById("rankInput").value);
             const kd = parseFloat(document.getElementById("kdInput").value);
             let score;
+            let resultMessage;
 
             if (isNaN(rank) || isNaN(kd)) {
-                document.getElementById("resultLabel").innerText = currentLanguage === 'ko' ? "올바른 값을 기입하세요." : "Please enter valid values.";
+                document.getElementById("resultLabel").innerText = "올바른 값을 기입하세요.";
                 return;
             }
 
@@ -218,30 +193,26 @@
                 score = (rank / 400) * kd;
             }
 
-            const sortedData = playerData.slice().sort((a, b) => b.score - a.score);
-            const userRank = sortedData.findIndex(player => score >= player.score) + 1;
-            const percentage = ((userRank / sortedData.length) * 100).toFixed(2);
+            if (score <= 1.2) {
+                resultMessage = translations[currentLanguage].belowAverage;
+            } else if (score <= 1.6) {
+                resultMessage = translations[currentLanguage].average;
+            } else {
+                resultMessage = translations[currentLanguage].aboveAverage;
+            }
 
-            document.getElementById("resultLabel").innerText = `${translations[currentLanguage].scoreMessage}${score.toFixed(2)}${translations[currentLanguage].topPercentMessage}${percentage}%`;
-
-            // Google Sheets로 데이터 전송
-            sendToGoogleSheets(rank, kd, score);
+            document.getElementById("resultLabel").innerText = translations[currentLanguage].scoreMessage + score.toFixed(2) + " - " + resultMessage;
         }
-
-        window.onload = function() {
-            changeLanguage('ko');
-            fetchData();
-        };
     </script>
 </head>
-<body>
+<body onload="changeLanguage('en')">
     <div class="container">
         <div class="language-switch">
             <label class="switch">
                 <input type="checkbox" id="languageToggle" onclick="toggleLanguage()">
                 <span class="slider">
-                    <span class="slider-label">EN</span>
-                    <span class="slider-label">KO</span>
+                    <span class="slider-label">en</span>
+                    <span class="slider-label">ko</span>
                 </span>
             </label>
         </div>
