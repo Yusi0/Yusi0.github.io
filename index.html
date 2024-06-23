@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -40,7 +39,7 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 80%;
+            width: 50%;
         }
         button {
             padding: 15px 30px;
@@ -50,6 +49,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
@@ -65,13 +65,54 @@
             color: #666;
             text-align: center;
         }
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
     </style>
     <script>
+        const translations = {
+            en: {
+                title: "PF Score Calc.",
+                rankLabel: "Rank:",
+                kdLabel: "KDR:",
+                calculateButton: "Calc!",
+                scoreMessage: "Score: ",
+                belowAverage: "Below Average",
+                average: "Average",
+                aboveAverage: "Above Average",
+                additionalInfo: "Rank and KDR alone cannot evaluate skill. Objective judgment should consider play style.\n\nThe average score for Korean users collected through KPT S2 is 1.4. What is your score?"
+            },
+            ko: {
+                title: "팬텀포스 점수 계산기",
+                rankLabel: "랭크:",
+                kdLabel: "KDR:",
+                calculateButton: "계산",
+                scoreMessage: "스코어: ",
+                belowAverage: "평균 미만",
+                average: "평균",
+                aboveAverage: "평균 이상",
+                additionalInfo: "랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단해야 합니다.\n\nKPT S2를 통해 수집한 한국 유저의 평균 점수는 1.4점입니다. 당신은 몇 점인가요?"
+            }
+        };
+
+        let currentLanguage = 'ko';
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.getElementById("title").innerText = translations[lang].title;
+            document.getElementById("rankLabel").innerText = translations[lang].rankLabel;
+            document.getElementById("kdLabel").innerText = translations[lang].kdLabel;
+            document.getElementById("calculateButton").innerText = translations[lang].calculateButton;
+            document.getElementById("additionalInfo").innerText = translations[lang].additionalInfo;
+        }
+
         function calculateScore() {
-            var rank = parseInt(document.getElementById("rankInput").value);
-            var kd = parseFloat(document.getElementById("kdInput").value);
-            var score;
-            var resultMessage;
+            const rank = parseInt(document.getElementById("rankInput").value);
+            const kd = parseFloat(document.getElementById("kdInput").value);
+            let score;
+            let resultMessage;
 
             if (isNaN(rank) || isNaN(kd)) {
                 document.getElementById("resultLabel").innerText = "올바른 값을 기입하세요.";
@@ -89,23 +130,27 @@
             }
 
             if (score <= 1.2) {
-                resultMessage = "평균 미만";
+                resultMessage = translations[currentLanguage].belowAverage;
             } else if (score <= 1.6) {
-                resultMessage = "평균";
+                resultMessage = translations[currentLanguage].average;
             } else {
-                resultMessage = "평균 이상";
+                resultMessage = translations[currentLanguage].aboveAverage;
             }
 
-            document.getElementById("resultLabel").innerText = "스코어: " + score.toFixed(2) + " - " + resultMessage;
+            document.getElementById("resultLabel").innerText = translations[currentLanguage].scoreMessage + score.toFixed(2) + " - " + resultMessage;
         }
     </script>
 </head>
-<body>
+<body onload="changeLanguage('ko')">
     <div class="container">
-        <h1>팬텀포스 점수 계산기</h1>
-        <label for="rankInput">랭크:</label>
+        <div class="language-buttons">
+            <button onclick="changeLanguage('ko')">ko</button>
+            <button onclick="changeLanguage('en')">en</button>
+        </div>
+        <h1 id="title">팬텀포스 점수 계산기</h1>
+        <label id="rankLabel" for="rankInput">랭크:</label>
         <input type="text" id="rankInput" placeholder="랭크"><br>
-        <label for="kdInput">로비 KDR:</label>
+        <label id="kdLabel" for="kdInput">KDR:</label>
         <input type="text" id="kdInput" placeholder="KDR"><br>
         <button id="calculateButton" onclick="calculateScore()">계산</button><br>
         <label id="resultLabel"></label>
