@@ -214,7 +214,6 @@
 
             document.getElementById("resultLabel").innerText = `${translations[currentLanguage].scoreMessage}${score.toFixed(2)}${translations[currentLanguage].topPercentMessage}${percentage}%`;
 
-            // Google Sheets로 데이터 전송
             sendToGoogleSheets(rank, kd);
         }
 
