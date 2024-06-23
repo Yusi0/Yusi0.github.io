@@ -40,7 +40,7 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 80%; /* Adjusted width */
+            width: 80%;
         }
         button {
             padding: 15px 30px;
@@ -74,7 +74,7 @@
             var resultMessage;
 
             if (isNaN(rank) || isNaN(kd)) {
-                document.getElementById("resultLabel").innerText = "올바른 숫자를 입력하세요.";
+                document.getElementById("resultLabel").innerText = "올바르게 입력하세요.";
                 return;
             }
 
@@ -89,11 +89,11 @@
             }
 
             if (score <= 1.2) {
-                resultMessage = "평균 이하입니다.";
+                resultMessage = "평균 미만";
             } else if (score <= 1.6) {
-                resultMessage = "평균입니다.";
+                resultMessage = "평균";
             } else {
-                resultMessage = "평균 이상입니다.";
+                resultMessage = "평균 이상";
             }
 
             document.getElementById("resultLabel").innerText = "스코어: " + score.toFixed(2) + " - " + resultMessage;
@@ -104,14 +104,14 @@
     <div class="container">
         <h1>팬텀포스 점수 계산기</h1>
         <label for="rankInput">플레이어 랭크:</label>
-        <input type="text" id="rankInput" placeholder="랭크 입력"><br>
+        <input type="text" id="rankInput" placeholder="랭크"><br>
         <label for="kdInput">플레이어 로비 킬뎃:</label>
-        <input type="text" id="kdInput" placeholder="킬뎃 입력"><br>
+        <input type="text" id="kdInput" placeholder="KDR"><br>
         <button id="calculateButton" onclick="calculateScore()">계산하기</button><br>
         <label id="resultLabel"></label>
         <div id="additionalInfo">
-            랭크와 KDR만으로는 실력을 평가할 수 없습니다.<br>
-            KPT 평균 점수는 1.4입니다. 당신의 점수는 어느 정도인가요?
+            랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단하세요.<br>
+            KPT S2의 평균 점수는 1.4점입니다. 당신은 몇 점인가요?
         </div>
     </div>
 </body>
