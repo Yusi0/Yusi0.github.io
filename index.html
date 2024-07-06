@@ -34,7 +34,7 @@
         }
         label {
             font-size: 18px;
-            margin: 10px 0;
+            margin: 10px 0 5px;
         }
         input {
             padding: 10px;
@@ -133,17 +133,6 @@
     <script>
         const translations = {
             ko: {
-                title: "PF Score Calc.",
-                rankLabel: "Rank:",
-                kdLabel: "Lobby KDR:",
-                calculateButton: "Calculate",
-                scoreMessage: "Score: ",
-                belowAverage: "Below Average",
-                average: "Average",
-                aboveAverage: "Above Average",
-                additionalInfo: "Rank and KDR alone cannot evaluate skill. Objective judgment should consider play style.\n\nThe average score for Korean users is 1.4. What is your score?"
-            },
-            en: {
                 title: "팬텀포스 점수 계산기",
                 rankLabel: "랭크:",
                 kdLabel: "로비 KDR:",
@@ -152,7 +141,18 @@
                 belowAverage: "평균 미만",
                 average: "평균",
                 aboveAverage: "평균 이상",
-                additionalInfo: "랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단해야 합니다.\n\n한국 유저의 평균 점수는 약 1.5점입니다. 당신은 몇 점인가요?"
+                additionalInfo: "랭크와 KDR만으로는 실력을 평가할 수 없습니다. 플레이 스타일을 고려해 객관적으로 판단해야 합니다.\n\n한국 유저의 평균 점수는 1.8점입니다. 당신은 몇 점인가요?"
+            },
+            en: {
+                title: "PF Score Calc.",
+                rankLabel: "Rank:",
+                kdLabel: "Lobby KDR:",
+                calculateButton: "Calculate",
+                scoreMessage: "Score: ",
+                belowAverage: "Below Average",
+                average: "Average",
+                aboveAverage: "Above Average",
+                additionalInfo: "Rank and KDR alone cannot evaluate skill. Objective judgment should consider play style.\n\nThe average score for Korean users is 1.8. What is your score?"
             }
         };
 
@@ -178,24 +178,22 @@
             let score;
             let resultMessage;
 
-            if (isNaN(rank) || isNaN(kd)) {
+            if (isNaN(rank) || isNaN(kd) || rank <= 0 || kd < 0) {
                 document.getElementById("resultLabel").innerText = "올바른 값을 기입하세요.";
                 return;
             }
 
-            if (rank >= 0 && rank <= 100) {
-                score = (rank / 100) * kd;
-            } else if (rank > 100 && rank <= 200) {
-                score = (rank / 200) * kd;
-            } else if (rank > 200 && rank <= 300) {
-                score = (rank / 300) * kd;
-            } else {
-                score = (rank / 400) * kd;
+            function logBase(base, x) {
+                return Math.log(x) / Math.log(base);
             }
 
-            if (score <= 1.2) {
+            score = logBase(1.06, rank) * kd * 0.01;
+
+            score = Math.round(score * 100) / 100;
+
+            if (score <= 1.6) {
                 resultMessage = translations[currentLanguage].belowAverage;
-            } else if (score <= 1.6) {
+            } else if (score <= 1.9) {
                 resultMessage = translations[currentLanguage].average;
             } else {
                 resultMessage = translations[currentLanguage].aboveAverage;
@@ -225,8 +223,9 @@
         <label id="resultLabel"></label>
         <div id="additionalInfo">
             랭크와 KDR만으로는 실력을 평가할 수 없습니다.<br>플레이 스타일을 고려해 객관적으로 판단해야 합니다.<br><br>
-            KPT S2를 통해 수집한 한국 유저의 평균 점수는 1.4점입니다.<br>당신은 몇 점인가요?
+            한국 유저의 평균 점수는 1.8점입니다.<br>당신은 몇 점인가요?
         </div>
     </div>
 </body>
 </html>
+
